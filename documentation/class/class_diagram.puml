@@ -1,0 +1,197 @@
+@startuml
+
+' Define abstract User class
+abstract class User {
+    +int userID
+    +String lastName
+    +String firstName
+    +String email
+    +String phone
+    +Address address
+    +Authentication authentication
+    +login()
+    +logout()
+}
+
+' Administrator class inherits from User
+class Administrator {
+    +manageBooks()
+    +manageUsers()
+    +manageLoans()
+    +manageReservations()
+    +generateReports()
+    +viewOverdueReturns()
+    +contactUserOverdue()
+    +blockUser()
+}
+
+User <|-- Administrator
+
+' Member class inherits from User
+class Member {
+    +searchBook(criteria: String)
+    +checkAvailability(bookID: int): boolean
+    +borrowBook(bookID: int)
+    +viewBorrowings(): List<Loan>
+    +extendBorrowing(loanID: int)
+    +reserveBook(bookID: int)
+    +receiveNotifications()
+    +viewHistory(): List<Loan>
+}
+
+User <|-- Member
+
+' Authentication class
+class Authentication {
+    +int authID
+    +String username
+    +String password
+    +Date lastLoginDate
+    +login()
+    +logout()
+}
+
+' Address class
+class Address {
+    +int addressID
+    +String number
+    +String street
+    +String postalCode
+    +City city
+}
+
+' City class
+class City {
+    +int cityID
+    +String cityName
+}
+
+' Book class
+class Book {
+    +int bookID
+    +String title
+    +Date publicationDate
+    +String status
+    +String condition
+    +String isbn
+    +int pageCount
+    +String publisher
+    +String language
+    +String summary
+    +Collection collection
+    +List<Genre> genres
+    +List<Creator> creators
+    +addGenre(genre: Genre)
+    +removeGenre(genre: Genre)
+    +addCreator(creator: Creator)
+    +removeCreator(creator: Creator)
+}
+
+' Collection class
+class Collection {
+    +int collectionID
+    +String collectionName
+    +String collectionDescription
+}
+
+' Genre class
+class Genre {
+    +int genreID
+    +String genreName
+}
+
+' Creator class
+class Creator {
+    +int creatorID
+    +String lastName
+    +String firstName
+    +String bio
+}
+
+' Loan class
+class Loan {
+    +int loanID
+    +Date loanDate
+    +Date actualReturnDate
+    +User user
+    +Book book
+    +String status
+    +borrow()
+    +returnBook()
+    +extend()
+    +checkOverdue()
+}
+
+' Reservation class
+class Reservation {
+    +int reservationID
+    +Date reservationDate
+    +String reservationStatus
+    +User user
+    +Book book
+    +reserve()
+    +confirmReservation()
+    +cancelReservation()
+}
+
+' Notification class
+class Notification {
+    +int notificationID
+    +String message
+    +Date notificationDate
+    +String notificationType
+    +String channel
+    +User user
+    +sendNotification()
+}
+
+' Report class
+class Report {
+    +int reportID
+    +String reportType
+    +Date generatedDate
+    +String data
+    +generateReport()
+}
+
+' Relationships
+
+' User to Address
+User "1" --> "1" Address : has
+
+' User to Authentication
+User "1" --> "1" Authentication : has
+
+' Administrator to Report
+Administrator "1" --> "0..*" Report : generates
+
+' Member to Loan
+Member "1" --> "0..*" Loan : borrows
+
+' Member to Reservation
+Member "1" --> "0..*" Reservation : makes
+
+' Member to Notification
+Member "1" --> "0..*" Notification : receives
+
+' Book to Loan
+Book "1" --> "0..*" Loan : is borrowed in
+
+' Book to Reservation
+Book "1" --> "0..*" Reservation : is reserved in
+
+' Book to Genre (Many-to-Many)
+Book "1" -- "0..*" Genre : belongs to
+Genre "0..*" -- "1" Book : includes
+
+' Book to Creator (Many-to-Many)
+Book "1" -- "0..*" Creator : written by
+Creator "0..*" -- "1" Book : authors
+
+' Collection to Book
+Collection "1" --> "0..*" Book : includes
+
+' City to Address
+City "1" --> "0..*" Address : contains
+
+@enduml
