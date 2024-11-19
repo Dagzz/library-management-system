@@ -1,0 +1,89 @@
+@startuml
+
+actor Administrator
+actor User
+
+package "Authentication" {
+    usecase "Login" as UC_LOGIN
+    usecase "Logout" as UC_LOGOUT
+}
+
+package "Administrator" {
+    usecase "Add New Books" as UC_ADD_BOOKS
+    usecase "Modify Book Information" as UC_MODIFY_BOOK
+    usecase "Delete a Book" as UC_DELETE_BOOK
+    usecase "View All Borrowed Books" as UC_VIEW_BORROWED_BOOKS
+    usecase "Manage User Information" as UC_MANAGE_USERS
+    usecase "Manage Borrowing and Returns" as UC_MANAGE_BORROWINGS
+    usecase "Generate Borrowing Reports and Statistics" as UC_GENERATE_REPORTS
+    usecase "View User Borrowing History" as UC_VIEW_USER_HISTORY
+    usecase "View Overdue Returns" as UC_VIEW_OVERDUE_RETURNS
+    usecase "Contact User for Overdue" as UC_CONTACT_USER_OVERDUE
+    usecase "Block User for Repeated Overdues" as UC_BLOCK_USER_OVERDUE
+}
+
+package "User" {
+    usecase "Search for a Book" as UC_SEARCH_BOOK
+    usecase "Check Book Availability" as UC_CHECK_AVAILABILITY
+    usecase "Borrow a Book" as UC_BORROW_BOOK
+    usecase "View My Borrowings" as UC_VIEW_MY_BORROWINGS
+    usecase "Extend Borrowing Period" as UC_EXTEND_BORROWING
+    usecase "Reserve a Borrowed Book" as UC_RESERVE_BOOK
+    usecase "Receive Notifications or Reminders" as UC_RECEIVE_NOTIFICATIONS
+    usecase "Access User Interface" as UC_ACCESS_INTERFACE
+    usecase "View My Borrowing History" as UC_VIEW_MY_HISTORY
+}
+
+' Authentication Relationships
+Administrator --> UC_LOGIN
+Administrator --> UC_LOGOUT
+User --> UC_LOGIN
+User --> UC_LOGOUT
+
+' Access Interface after Login
+UC_LOGIN --> UC_ACCESS_INTERFACE : <<include>>
+
+' Administrator Relationships
+Administrator --> UC_ADD_BOOKS
+Administrator --> UC_MODIFY_BOOK
+Administrator --> UC_DELETE_BOOK
+Administrator --> UC_VIEW_BORROWED_BOOKS
+Administrator --> UC_MANAGE_USERS
+Administrator --> UC_MANAGE_BORROWINGS
+Administrator --> UC_GENERATE_REPORTS
+Administrator --> UC_VIEW_USER_HISTORY
+Administrator --> UC_VIEW_OVERDUE_RETURNS
+Administrator --> UC_CONTACT_USER_OVERDUE
+Administrator --> UC_BLOCK_USER_OVERDUE
+
+' User Relationships
+User --> UC_SEARCH_BOOK
+User --> UC_CHECK_AVAILABILITY
+User --> UC_BORROW_BOOK
+User --> UC_VIEW_MY_BORROWINGS
+User --> UC_EXTEND_BORROWING
+User --> UC_RESERVE_BOOK
+User --> UC_RECEIVE_NOTIFICATIONS
+User --> UC_ACCESS_INTERFACE
+User --> UC_VIEW_MY_HISTORY
+
+' Include Relationships for Administrator
+UC_MANAGE_BORROWINGS --> UC_VIEW_BORROWED_BOOKS : <<include>>
+UC_MANAGE_BORROWINGS --> UC_VIEW_USER_HISTORY : <<include>>
+UC_MANAGE_BORROWINGS --> UC_VIEW_OVERDUE_RETURNS : <<include>>
+UC_MANAGE_USERS --> UC_BLOCK_USER_OVERDUE : <<include>>
+
+' Include Relationships for User
+UC_BORROW_BOOK --> UC_SEARCH_BOOK : <<include>>
+UC_BORROW_BOOK --> UC_CHECK_AVAILABILITY : <<include>>
+UC_EXTEND_BORROWING --> UC_VIEW_MY_BORROWINGS : <<include>>
+
+' Extend Relationships for Administrator
+UC_CONTACT_USER_OVERDUE .> UC_MANAGE_BORROWINGS : <<extend>>
+UC_GENERATE_REPORTS .> UC_VIEW_BORROWED_BOOKS : <<extend>>
+
+' Extend Relationships for User
+UC_RESERVE_BOOK .> UC_BORROW_BOOK : <<extend>>
+UC_RECEIVE_NOTIFICATIONS .> UC_VIEW_MY_BORROWINGS : <<extend>>
+
+@enduml
