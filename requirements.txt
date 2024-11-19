@@ -1,0 +1,11 @@
+# MySQL database server version 8.0.0
+MySQLServer==8.0.0
+
+# ORM (Object-Relational Mapping) library to interact with the database
+SQLAlchemy==2.0.36
+
+# PyMySQL connector to enable SQLAlchemy to communicate with MySQL
+pymysql==1.1.1
+
+# Database schema migration management tool
+alembic==1.14.0
