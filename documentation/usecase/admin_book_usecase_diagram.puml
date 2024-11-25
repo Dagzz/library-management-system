@@ -1,0 +1,37 @@
+@startuml
+
+skinparam actorStyle Hollow 
+
+actor Admin
+
+package "Portal" {
+    usecase "Search A Book" as UC_SEARCH_BOOK
+    usecase "Add New Books" as UC_ADD_BOOKS
+    usecase "Modify Book Information" as UC_MODIFY_BOOK
+    usecase "Delete a Book" as UC_DELETE_BOOK
+    usecase "View All Borrowed Books" as UC_VIEW_BORROWED_BOOKS
+    usecase "Manage Borrowing and Returns" as UC_MANAGE_BORROWINGS
+    usecase "Generate Borrowing Reports and Statistics" as UC_GENERATE_REPORTS
+}
+
+usecase "Access Admin Interface" as UC_ACCESS_INTERFACE
+usecase "Authentication" as UC_AUTH
+
+Portal --> UC_ACCESS_INTERFACE : <<include>>
+UC_ACCESS_INTERFACE --> UC_AUTH : <<include>>
+
+Admin --> UC_ADD_BOOKS
+Admin --> UC_DELETE_BOOK
+Admin --> UC_MODIFY_BOOK
+Admin --> UC_SEARCH_BOOK
+
+Admin --> UC_VIEW_BORROWED_BOOKS
+Admin --> UC_MANAGE_BORROWINGS
+Admin --> UC_GENERATE_REPORTS
+
+UC_MANAGE_BORROWINGS --> UC_VIEW_BORROWED_BOOKS : <<include>>
+UC_VIEW_BORROWED_BOOKS --> UC_GENERATE_REPORTS : <<include>>
+UC_DELETE_BOOK --> UC_SEARCH_BOOK : <<include>>
+UC_MODIFY_BOOK --> UC_SEARCH_BOOK : <<include>>
+
+@enduml

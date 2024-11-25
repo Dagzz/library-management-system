@@ -1,0 +1,33 @@
+@startuml
+
+skinparam actorStyle Hollow 
+
+actor Admin
+
+package "Portal" {
+    usecase "Search Users" as UC_SEARCH_USERS
+    usecase "Manage User Information" as UC_MANAGE_USERS
+    usecase "View User Borrowing History" as UC_VIEW_USER_HISTORY
+    usecase "Contact User for Overdue" as UC_CONTACT_USER_OVERDUE
+    usecase "Block User for Repeated Overdues" as UC_BLOCK_USER_OVERDUE
+}
+
+usecase "Access Admin Interface" as UC_ACCESS_INTERFACE
+usecase "Authentication" as UC_AUTH
+
+Portal --> UC_ACCESS_INTERFACE : <<include>>
+UC_ACCESS_INTERFACE --> UC_AUTH : <<include>>
+
+Admin --> UC_SEARCH_USERS
+Admin --> UC_MANAGE_USERS
+Admin --> UC_VIEW_USER_HISTORY
+Admin --> UC_CONTACT_USER_OVERDUE
+Admin --> UC_BLOCK_USER_OVERDUE
+
+UC_MANAGE_USERS --> UC_SEARCH_USERS : <<include>>
+UC_BLOCK_USER_OVERDUE --> UC_SEARCH_USERS : <<include>>
+UC_VIEW_USER_HISTORY --> UC_SEARCH_USERS : <<include>>
+UC_CONTACT_USER_OVERDUE --> UC_SEARCH_USERS : <<include>>
+
+
+@enduml
