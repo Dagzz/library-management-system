@@ -1,0 +1,39 @@
+@startuml
+
+skinparam actorStyle Hollow 
+
+actor Member
+
+package "Portal" {
+    usecase "Borrow a Book" as UC_BORROW_BOOK
+    usecase "Reserve a Book" as UC_RESERVE_BOOK
+    usecase "Search for a Book" as UC_SEARCH_BOOK
+    usecase "Check Book Availability" as UC_CHECK_BOOK
+    usecase "View My Borrowings" as UC_VIEW_BORROWINGS
+    usecase "View My Reservations" as UC_VIEW_RESERVATIONS
+    usecase "Extend Borrowing Period" as UC_EXTEND_BORROW
+    usecase "Cancel Reservation" as UC_CANCEL_RESERVATION
+    usecase "Receive Notifications" as UC_RECEIVE_NOTIFICATIONS
+}
+
+usecase "Access Member Interface" as UC_ACCESS_INTERFACE
+usecase "Authentication" as UC_AUTH
+
+Portal --> UC_ACCESS_INTERFACE : <<include>>
+
+Member --> UC_SEARCH_BOOK
+Member --> UC_BORROW_BOOK
+Member --> UC_RESERVE_BOOK
+Member --> UC_VIEW_BORROWINGS
+Member --> UC_VIEW_RESERVATIONS
+Member --> UC_RECEIVE_NOTIFICATIONS
+
+UC_RESERVE_BOOK --> UC_SEARCH_BOOK : <<include>>
+UC_BORROW_BOOK --> UC_SEARCH_BOOK : <<include>>
+UC_SEARCH_BOOK --> UC_CHECK_BOOK : <<include>>
+UC_ACCESS_INTERFACE --> UC_AUTH : <<include>>
+
+UC_EXTEND_BORROW --> UC_VIEW_BORROWINGS : <<extend>>
+UC_CANCEL_RESERVATION --> UC_VIEW_RESERVATIONS : <<extend>>
+
+@enduml
