@@ -1,16 +1,16 @@
 #------------------------------------------------------------
-#        Script MySQL corrigé.
+#        CREATE DATABASE
 #------------------------------------------------------------
 
 #------------------------------------------------------------
 # Table: author
 #------------------------------------------------------------
 
-CREATE TABLE author(
-    id_author  INT AUTO_INCREMENT NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name  VARCHAR(100),
-    bio        TEXT NOT NULL,
+CREATE TABLE author (
+    id_author     INT AUTO_INCREMENT NOT NULL,
+    first_name    VARCHAR(100) NOT NULL,
+    last_name     VARCHAR(100),
+    bio           TEXT NOT NULL,
     CONSTRAINT author_PK PRIMARY KEY (id_author)
 ) ENGINE=InnoDB;
 
@@ -18,9 +18,10 @@ CREATE TABLE author(
 # Table: genre
 #------------------------------------------------------------
 
-CREATE TABLE genre(
-    id_genre   INT AUTO_INCREMENT NOT NULL,
-    name_genre VARCHAR(100) NOT NULL,
+CREATE TABLE genre (
+    id_genre     INT AUTO_INCREMENT NOT NULL,
+    name_genre   VARCHAR(100) NOT NULL,
+    CONSTRAINT genre_AK UNIQUE (name_genre),
     CONSTRAINT genre_PK PRIMARY KEY (id_genre)
 ) ENGINE=InnoDB;
 
@@ -28,10 +29,11 @@ CREATE TABLE genre(
 # Table: collection
 #------------------------------------------------------------
 
-CREATE TABLE `collection`(
-    id_collection   INT AUTO_INCREMENT NOT NULL,
-    collection_name VARCHAR(50) NOT NULL,
-    description     TEXT NOT NULL,
+CREATE TABLE collection (
+    id_collection    INT AUTO_INCREMENT NOT NULL,
+    description      TEXT NOT NULL,
+    collection_name  VARCHAR(50) NOT NULL,
+    CONSTRAINT collection_AK UNIQUE (collection_name),
     CONSTRAINT collection_PK PRIMARY KEY (id_collection)
 ) ENGINE=InnoDB;
 
@@ -39,31 +41,32 @@ CREATE TABLE `collection`(
 # Table: city
 #------------------------------------------------------------
 
-CREATE TABLE city(
-    id_city INT AUTO_INCREMENT NOT NULL,
-    name    VARCHAR(50) NOT NULL,
+CREATE TABLE city (
+    id_city    INT AUTO_INCREMENT NOT NULL,
+    name       VARCHAR(50) NOT NULL,
+    CONSTRAINT city_AK UNIQUE (name),
     CONSTRAINT city_PK PRIMARY KEY (id_city)
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
-# Table: adresse
+# Table: addresse
 #------------------------------------------------------------
 
-CREATE TABLE adresse(
-    id_adresse  INT AUTO_INCREMENT NOT NULL,
-    number      VARCHAR(10) NOT NULL,
-    street      VARCHAR(50) NOT NULL,
-    postal_code VARCHAR(15) NOT NULL,
-    id_city     INT NOT NULL,
-    CONSTRAINT adresse_PK PRIMARY KEY (id_adresse),
-    CONSTRAINT adresse_city_FK FOREIGN KEY (id_city) REFERENCES city(id_city)
+CREATE TABLE addresse (
+    id_addresse  INT AUTO_INCREMENT NOT NULL,
+    number       VARCHAR(10) NOT NULL,
+    street       VARCHAR(50) NOT NULL,
+    postal_code  VARCHAR(15) NOT NULL,
+    id_city      INT NOT NULL,
+    CONSTRAINT addresse_PK PRIMARY KEY (id_addresse),
+    CONSTRAINT addresse_city_FK FOREIGN KEY (id_city) REFERENCES city(id_city)
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: user
 #------------------------------------------------------------
 
-CREATE TABLE `user`(
+CREATE TABLE user (
     id_user              INT AUTO_INCREMENT NOT NULL,
     first_name           VARCHAR(100) NOT NULL,
     last_name            VARCHAR(100) NOT NULL,
@@ -73,66 +76,93 @@ CREATE TABLE `user`(
     login                VARCHAR(100) NOT NULL,
     hashed_password      VARCHAR(255) NOT NULL,
     last_connection_date DATE NOT NULL,
-    member_status        ENUM('actif','inactif') NOT NULL,
-    id_adresse           INT,
+    is_active            BOOLEAN NOT NULL,
+    id_addresse          INT,
     CONSTRAINT user_PK PRIMARY KEY (id_user),
-    CONSTRAINT user_adresse_FK FOREIGN KEY (id_adresse) REFERENCES adresse(id_adresse)
+    CONSTRAINT user_addresse_FK FOREIGN KEY (id_addresse) REFERENCES addresse(id_addresse)
+) ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: admin
+#------------------------------------------------------------
+
+CREATE TABLE admin (
+    id_user         INT NOT NULL,
+    id_admin        INT NOT NULL,
+    first_name      VARCHAR(100) NOT NULL,
+    last_name       VARCHAR(100) NOT NULL,
+    date_of_birth   DATE NOT NULL,
+    mail            VARCHAR(254) NOT NULL,
+    phone           VARCHAR(15) NOT NULL,
+    login           VARCHAR(100) NOT NULL,
+    hashed_password VARCHAR(255) NOT NULL,
+    last_connection_date DATE NOT NULL,
+    is_active       BOOLEAN NOT NULL,
+    id_addresse     INT,
+    CONSTRAINT admin_PK PRIMARY KEY (id_user, id_admin),
+    CONSTRAINT admin_user_FK FOREIGN KEY (id_user) REFERENCES user(id_user),
+    CONSTRAINT admin_addresse0_FK FOREIGN KEY (id_addresse) REFERENCES addresse(id_addresse)
+) ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: language
+#------------------------------------------------------------
+
+CREATE TABLE language (
+    id_language INT AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    CONSTRAINT language_AK UNIQUE (name),
+    CONSTRAINT language_PK PRIMARY KEY (id_language)
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: book
 #------------------------------------------------------------
 
-CREATE TABLE book(
+CREATE TABLE book (
     id_book          INT AUTO_INCREMENT NOT NULL,
     title            VARCHAR(255) NOT NULL,
     publication_date DATE,
-    status           ENUM('disponible','emprunte','reserve') NOT NULL,
-    `condition`      ENUM('neuf','bon','abime') NOT NULL,
+    status           ENUM('available', 'borrowed', 'reserved') NOT NULL,
+    aspect           ENUM('new', 'good', 'damaged') NOT NULL,
     isbn             VARCHAR(17) NOT NULL,
     page_number      INT NOT NULL,
     editor           VARCHAR(255) NOT NULL,
-    langue           VARCHAR(20) NOT NULL,
+    langue           VARCHAR(10) NOT NULL,
     resume           TEXT NOT NULL,
-    created_at       DATETIME NOT NULL,
-    deleted_at       DATETIME DEFAULT NULL,
-    updated_at       DATETIME NOT NULL,
+    create_at        DATETIME NOT NULL,
+    delete_at        DATETIME NOT NULL,
+    update_at        DATETIME NOT NULL,
     id_collection    INT NOT NULL,
     id_user          INT NOT NULL,
-    id_user_delete   INT DEFAULT NULL,
+    id_admin         INT NOT NULL,
+    id_user_admin    INT NOT NULL,
+    id_admin_delete  INT NOT NULL,
+    id_language      INT NOT NULL,
+    id_language_2    INT,
     CONSTRAINT book_PK PRIMARY KEY (id_book),
-    CONSTRAINT book_collection_FK FOREIGN KEY (id_collection) REFERENCES `collection`(id_collection),
-    CONSTRAINT book_user0_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user),
-    CONSTRAINT book_user1_FK FOREIGN KEY (id_user_delete) REFERENCES `user`(id_user)
-) ENGINE=InnoDB;
-
-#------------------------------------------------------------
-# Table: notification
-#------------------------------------------------------------
-
-CREATE TABLE notification(
-    id_notification   INT AUTO_INCREMENT NOT NULL,
-    message           TEXT NOT NULL,
-    notification_date DATE NOT NULL,
-    notification_type ENUM('rappel','retard','confirmation') NOT NULL,
-    seen              BOOL NOT NULL,
-    id_user           INT NOT NULL,
-    CONSTRAINT notification_PK PRIMARY KEY (id_notification),
-    CONSTRAINT notification_user_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user)
+    
+    CONSTRAINT book_collection_FK FOREIGN KEY (id_collection) REFERENCES collection(id_collection),
+    CONSTRAINT book_admin0_FK FOREIGN KEY (id_user, id_admin) REFERENCES admin(id_user, id_admin),
+    CONSTRAINT book_admin1_FK FOREIGN KEY (id_user_admin, id_admin_delete) REFERENCES admin(id_user, id_admin),
+    
+    CONSTRAINT book_language_FK FOREIGN KEY (id_language) REFERENCES language(id_language),
+    
+    CONSTRAINT book_language2_FK FOREIGN KEY (id_language_2) REFERENCES language(id_language)
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: loan
 #------------------------------------------------------------
 
-CREATE TABLE loan(
-    id_loan     INT AUTO_INCREMENT NOT NULL,
-    date_loan   DATE NOT NULL,
-    return_date DATE NOT NULL,
-    id_user     INT NOT NULL,
-    id_book     INT NOT NULL,
+CREATE TABLE loan (
+    id_loan      INT AUTO_INCREMENT NOT NULL,
+    date_loan    DATE NOT NULL,
+    return_date  DATE NOT NULL,
+    id_user      INT NOT NULL,
+    id_book      INT NOT NULL,
     CONSTRAINT loan_PK PRIMARY KEY (id_loan),
-    CONSTRAINT loan_user_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user),
+    CONSTRAINT loan_user_FK FOREIGN KEY (id_user) REFERENCES user(id_user),
     CONSTRAINT loan_book0_FK FOREIGN KEY (id_book) REFERENCES book(id_book)
 ) ENGINE=InnoDB;
 
@@ -140,33 +170,23 @@ CREATE TABLE loan(
 # Table: reservation
 #------------------------------------------------------------
 
-CREATE TABLE reservation(
-    id_reservation     INT AUTO_INCREMENT NOT NULL,
-    reservation_date   DATE NOT NULL,
-    reservation_status ENUM('attente','confirmee') NOT NULL,
-    id_user            INT NOT NULL,
-    id_book            INT NOT NULL,
+CREATE TABLE reservation (
+    id_reservation    INT AUTO_INCREMENT NOT NULL,
+    reservation_date  DATE NOT NULL,
+    is_confirmed      BOOLEAN NOT NULL,
+    id_user           INT NOT NULL,
+    id_book           INT NOT NULL,
     CONSTRAINT reservation_PK PRIMARY KEY (id_reservation),
-    CONSTRAINT reservation_user_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user),
-    CONSTRAINT reservation_book0_FK FOREIGN KEY (id_book) REFERENCES book(id_book)
-) ENGINE=InnoDB;
-
-#------------------------------------------------------------
-# Table: role
-#------------------------------------------------------------
-
-CREATE TABLE `role`(
-    id_role     INT AUTO_INCREMENT NOT NULL,
-    role_name   ENUM('administrateur','membre','super_administrateur') NOT NULL,
-    description TEXT NOT NULL,
-    CONSTRAINT role_PK PRIMARY KEY (id_role)
+    CONSTRAINT reservation_user_FK FOREIGN KEY (id_user) REFERENCES user(id_user),
+    CONSTRAINT reservation_book0_FK FOREIGN KEY (id_book) REFERENCES book(id_book),
+    CONSTRAINT reservation_user_AK UNIQUE (id_user)
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: writes
 #------------------------------------------------------------
 
-CREATE TABLE writes(
+CREATE TABLE writes (
     id_author INT NOT NULL,
     id_book   INT NOT NULL,
     CONSTRAINT writes_PK PRIMARY KEY (id_author, id_book),
@@ -178,7 +198,7 @@ CREATE TABLE writes(
 # Table: belongs
 #------------------------------------------------------------
 
-CREATE TABLE belongs(
+CREATE TABLE belongs (
     id_genre INT NOT NULL,
     id_book  INT NOT NULL,
     CONSTRAINT belongs_PK PRIMARY KEY (id_genre, id_book),
@@ -187,26 +207,15 @@ CREATE TABLE belongs(
 ) ENGINE=InnoDB;
 
 #------------------------------------------------------------
-# Table: is
-#------------------------------------------------------------
-
-CREATE TABLE `is`(
-    id_role INT NOT NULL,
-    id_user INT NOT NULL,
-    CONSTRAINT is_PK PRIMARY KEY (id_role, id_user),
-    CONSTRAINT is_role_FK FOREIGN KEY (id_role) REFERENCES `role`(id_role),
-    CONSTRAINT is_user0_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user)
-) ENGINE=InnoDB;
-
-#------------------------------------------------------------
 # Table: modify
 #------------------------------------------------------------
 
-CREATE TABLE `modify`(
+CREATE TABLE modify (
     id_user           INT NOT NULL,
+    id_admin          INT NOT NULL,
     id_book           INT NOT NULL,
     modification_date DATETIME NOT NULL,
-    CONSTRAINT modify_PK PRIMARY KEY (id_user, id_book),
-    CONSTRAINT modify_user_FK FOREIGN KEY (id_user) REFERENCES `user`(id_user),
+    CONSTRAINT modify_PK PRIMARY KEY (id_user, id_admin, id_book),
+    CONSTRAINT modify_admin_FK FOREIGN KEY (id_user, id_admin) REFERENCES admin(id_user, id_admin),
     CONSTRAINT modify_book0_FK FOREIGN KEY (id_book) REFERENCES book(id_book)
 ) ENGINE=InnoDB;
