@@ -9,3 +9,5 @@ if __name__ == "__main__":
             print("Successfully connected to MySQL database!")
     except Exception as e:
         print(f"Error while connecting: {e}")
+        
+        
