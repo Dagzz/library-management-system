@@ -1,13 +1,14 @@
-from src.repositories.database_connection import get_engine
+import sys
+from PyQt6.QtWidgets import QApplication
+from src.controllers.main_controller import MainController
 
-# Test the connection to the database
-
-if __name__ == "__main__":
-    try:
-        engine = get_engine()
-        with engine.connect() as connection:
-            print("Successfully connected to MySQL database!")
-    except Exception as e:
-        print(f"Error while connecting: {e}")
-        
-        
+def main():
+    
+    app = QApplication(sys.argv)
+    
+    controller = MainController()
+    
+    sys.exit(app.exec())
+    
+if __name__ == '__main__':
+    main()
