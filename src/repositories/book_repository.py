@@ -1,67 +1,103 @@
-from src.models.book import Book
-from src.dal.database_connection import get_session
-from typing import List
+from sqlalchemy.orm import Session
+from typing import List, Optional
+from models import Book, Author, Genre, Reservation
 
 class BookRepository:
-    def __init__(self):
-        """
-        Initialize the BookRepository class.
+    def __init__(self, session: Session):
+        self.session = session
 
-        This constructor sets up the database session for the repository 
-        by using the `get_session` function from the `database_connection` module.
-
-        :return: None
+    def get_book_by_id(self, book_id: int) -> Optional[Book]:
         """
-        self.session = get_session()
+        Fetch a book by its ID.
+        """
+        return self.session.query(Book).filter(Book.id_book == book_id).one_or_none()
+
+    def get_books_by_title(self, title: str) -> List[Book]:
+        """
+        Fetch books by their title (case insensitive).
+        """
+        return self.session.query(Book).filter(Book.title.ilike(f"%{title}%")).all()
+
+    def get_books_by_author(self, author_id: int) -> List[Book]:
+        """
+        Fetch all books by a specific author.
+        """
+        return (
+            self.session.query(Book)
+            .join(Book.authors)
+            .filter(Author.id_author == author_id)
+            .all()
+        )
+
+    def get_books_by_genre(self, genre_id: int) -> List[Book]:
+        """
+        Fetch all books in a specific genre.
+        """
+        return (
+            self.session.query(Book)
+            .join(Book.genres)
+            .filter(Genre.id_genre == genre_id)
+            .all()
+        )
+
+    def get_books_by_collection(self, collection_id: int) -> List[Book]:
+        """
+        Fetch all books in a specific collection.
+        """
+        return self.session.query(Book).filter(Book.id_collection == collection_id).all()
+
+    def get_books_by_language(self, language_id: int) -> List[Book]:
+        """
+        Fetch all books in a specific language.
+        """
+        return self.session.query(Book).filter(Book.id_language == language_id).all()
+
+    def get_books_by_status(self, status: str) -> List[Book]:
+        """
+        Fetch all books by their status (e.g., "available", "borrowed", "reserved").
+        """
+        return self.session.query(Book).filter(Book.status == status).all()
+
+    def get_books_by_aspect(self, aspect: str) -> List[Book]:
+        """
+        Fetch all books by their aspect (e.g., "new", "good", "damaged").
+        """
+        return self.session.query(Book).filter(Book.aspect == aspect).all()
+
+    def get_reserved_books(self) -> List[Book]:
+        """
+        Fetch all books that are currently reserved.
+        """
+        return (
+            self.session.query(Book)
+            .join(Book.reservations)
+            .filter(Reservation.is_confirmed == True)
+            .all()
+        )
 
     def add_book(self, book: Book) -> Book:
         """
         Add a new book to the database.
-
-        This function takes a `Book` object as input, adds it to the current session,
-        commits the transaction to persist the data in the database, and returns the added book.
-
-        :param book: A `Book` object to be added to the database.
-        :return: The `Book` object that was added to the database.
         """
         self.session.add(book)
         self.session.commit()
         return book
 
-    def get_all_books(self) -> List[Book]:
+    def update_book(self, book: Book) -> Book:
         """
-        Retrieve all books from the database.
-
-        This function queries the `Book` table to fetch all the records and 
-        returns them as a list of `Book` objects.
-
-        :return: A list of `Book` objects representing all books in the database.
+        Update an existing book in the database.
         """
-        return self.session.query(Book).all()
+        self.session.merge(book)
+        self.session.commit()
+        return book
 
-    def get_book_by_id(self, book_id: int) -> (Book | None):
+    def delete_book(self, book_id: int) -> bool:
         """
-        Retrieve a specific book from the database by its ID.
-
-        This function filters the `Book` table by the given `book_id` 
-        and returns the first matching `Book` object, or `None` if no match is found.
-
-        :param book_id: An integer representing the ID of the book to retrieve.
-        :return: A `Book` object if found, or `None` if no book matches the given ID.
-        """
-        return self.session.query(Book).filter_by(id_book=book_id).first()
-
-    def delete_book(self, book_id: int) -> None:
-        """
-        Delete a book from the database by its ID.
-
-        This function retrieves a `Book` object by its ID, deletes it from the 
-        current session if it exists, and commits the transaction to apply the changes.
-
-        :param book_id: An integer representing the ID of the book to delete.
-        :return: None
+        Delete a book by its ID.
         """
         book = self.get_book_by_id(book_id)
         if book:
             self.session.delete(book)
             self.session.commit()
+            return True
+        return False

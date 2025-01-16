@@ -1,4 +1,4 @@
-from src.repositories.database_connection import get_engine
+from database_connection import get_engine
 
 # Test the connection to the database
 
