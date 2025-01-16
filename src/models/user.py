@@ -3,7 +3,7 @@
 # ============================================
 
 from sqlalchemy import (
-    Column, Integer, String, Boolean,
+    Column, Index, Integer, String, Boolean,
     DateTime, ForeignKey, UniqueConstraint
 )
 from sqlalchemy.orm import relationship
@@ -14,6 +14,7 @@ class User(Base):
     __tablename__ = 'user'
     __table_args__ = (
         UniqueConstraint('login', name='user_AK'),
+        Index('user_Idx', 'last_name', 'mail'),
     )
 
     id_user = Column(Integer, primary_key=True, autoincrement=True)
