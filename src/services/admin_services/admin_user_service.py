@@ -1,10 +1,9 @@
-from repositories.user_repository import UserRepository
-# from repositories.loan_repository import LoanRepository
-# from models import User
+from src.repositories.user_repository import UserRepository
+
 
 class UserService:
-    def __init__(self):
-        self.user_repository = UserRepository()
+    def __init__(self, repository):
+        self.user_repository = repository
         # self.loan_repository = LoanRepository()
 
     def create_user(self, first_name, last_name, login, mail, date_of_birth, phone, address):

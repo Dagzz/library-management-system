@@ -1,7 +1,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import Author, Book
+from src.models import Author, Book
 
 class AuthorRepository:
     def __init__(self, session: Session):

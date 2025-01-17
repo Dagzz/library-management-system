@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import Role, User
+from src.models import Role, User
 
 class RoleRepository:
     def __init__(self, session: Session):

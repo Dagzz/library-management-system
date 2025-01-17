@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import Modification
+from src.models import Modification
 
 class ModificationRepository:
     def __init__(self, session: Session):

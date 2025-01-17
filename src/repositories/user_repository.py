@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from typing import Optional, List
-from models import User, Role, Address, Reservation
+from src.models import User, Role, Address, Reservation
 
 class UserRepository:
     def __init__(self, session: Session):

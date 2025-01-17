@@ -1,0 +1,2 @@
+class AdminUserController() :
+    pass

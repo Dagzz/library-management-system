@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import Language, Book
+from src.models import Language, Book
 
 class LanguageRepository:
     def __init__(self, session: Session):

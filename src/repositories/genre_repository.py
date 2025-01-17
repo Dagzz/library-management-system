@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import Genre, Book
+from src.models import Genre, Book
 
 class GenreRepository:
     def __init__(self, session: Session):

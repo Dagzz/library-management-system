@@ -1,0 +1,2 @@
+class UserLoanController() :
+    pass

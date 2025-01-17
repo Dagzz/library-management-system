@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from models import City, Address
+from src.models import City, Address
 
 class CityRepository:
     def __init__(self, session: Session):

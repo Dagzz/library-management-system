@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from typing import List, Optional
-from models import Loan, Reservation
+from src.models import Loan, Reservation
 
 class LoanRepository:
     def __init__(self, session: Session):
