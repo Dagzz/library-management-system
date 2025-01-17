@@ -19,15 +19,17 @@ from src.repositories.modification_repository import ModificationRepository
 from src.services.auth_service import AuthService
 
 ## User Services
-from src.services.user_service import UserService
-from src.services.loan_service import LoanService
-from src.services.reservation_service import ReservationService
-from src.services.auth_service import AuthService  # userService for now, to implement after
+from src.services.user_services.user_book_service import UserBookService
+from src.services.user_services.user_loan_service import UserLoanService
+from src.services.user_services.user_reservation_service import UserReservationService
 
 ## Admin Services
+from src.services.admin_services.admin_book_service import AdminBookService
+from src.services.admin_services.admin_loan_service import AdminLoanService
+from src.services.admin_services.admin_user_service import AdminUserService
 
 # Controllers
-from src.controllers.login_controller import LoginController
+from src.controllers.auth_controller import AuthController
 
 ## Users Controllers
 from src.controllers.user_controllers.user_book_controller import UserBookController
@@ -49,7 +51,7 @@ from src.views.main_window import MainWindow
 class AppContainer:
     """
     Responsible for creating and wiring all dependencies:
-    - Database session
+    - Session factory
     - Repositories
     - Services
     - Controllers
@@ -61,31 +63,26 @@ class AppContainer:
         # Pass the session factory (get_session) instead of a single session
         # Manage the session lifecycle at the repository level
         
-        # 2. Create Repositories
+        # Create Repositories
         self.book_repo = BookRepository(get_session)
         self.user_repo = UserRepository(get_session)
         self.loan_repo = LoanRepository(get_session)
         
-        # 3. Create Services
-        self.book_service = BookService(self.book_repo)
-        self.user_service = UserService(self.user_repo)
-        self.loan_service = LoanService(self.loan_repo)
+        # Create Services
+        self.auth_service = AuthService(self.book_repo)
 
-        # 4. Create Views
+        # Create Views
         self.login_view = LoginView()
-        self.main_window = MainWindow()  # optional, if you have a main window
+        self.main_window = MainWindow()
 
-        # 5. Create Controllers (inject required services + views)
-        self.book_controller = BookController(self.book_service, self.book_view)
-        self.user_controller = UserController(self.user_service, self.user_view)
-        self.loan_controller = LoanController(self.loan_service, self.loan_view)
-        self.login_controller = LoginController(self.user_service, self.login_view)
+        # Create Controllers
+        self.auth_controller = AuthController(self.auth_service, self.login_view)
+        
         # Possibly pass main_window into some "MainController" if you have one
 
     def show_initial_ui(self):
         """
         Decide which UI to show first (login window, main window, etc.).
         """
-        # Example: show the login view first
         self.login_view.show()
         # Once the user is authenticated, the login_controller might show the main_window, etc.

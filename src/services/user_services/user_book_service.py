@@ -2,7 +2,7 @@ from src.repositories.book_repository import BookRepository
 # from repositories.loan_repository import LoanRepository  # if needed
 # from models import Book  # import your SQLAlchemy models if needed
 
-class BookService:
+class UserBookService:
     def __init__(self):
         self.book_repository = BookRepository()
         # self.loan_repository = LoanRepository()  # if you need to check borrowing status

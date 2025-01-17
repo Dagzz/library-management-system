@@ -4,7 +4,7 @@ from src.repositories.user_repository import UserRepository
 from src.repositories.book_repository import BookRepository
 from src.repositories.loan_repository import LoanRepository
 
-class ReservationService:
+class UserReservationService:
     def __init__(self):
         self.reservation_repository = ReservationRepository()
         self.user_repository = UserRepository()

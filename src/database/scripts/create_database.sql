@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS collection;
 DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS authentication;
 
 
 #------------------------------------------------------------
@@ -91,7 +92,6 @@ CREATE TABLE address(
         postal_code Varchar (15) NOT NULL ,
         id_city     Int NOT NULL
 	,CONSTRAINT address_PK PRIMARY KEY (id_address)
-
 	,CONSTRAINT address_city_FK FOREIGN KEY (id_city) REFERENCES city(id_city)
 )ENGINE=InnoDB;
 
@@ -105,20 +105,28 @@ CREATE TABLE user(
         first_name           Varchar (100) NOT NULL ,
         date_of_birth        Datetime NOT NULL ,
         phone                Varchar (15) NOT NULL ,
-        hashed_password      Varchar (255) NOT NULL ,
         last_connection_date Datetime NOT NULL ,
         is_active            Bool NOT NULL ,
-        login                Varchar (100) NOT NULL ,
         last_name            Varchar (100) NOT NULL ,
         mail                 Varchar (254) NOT NULL ,
         id_address           Int
-	,CONSTRAINT user_AK UNIQUE (login)
 	,INDEX user_Idx (last_name, mail)
 	,CONSTRAINT user_PK PRIMARY KEY (id_user)
-
 	,CONSTRAINT user_address_FK FOREIGN KEY (id_address) REFERENCES address(id_address)
 )ENGINE=InnoDB;
 
+#------------------------------------------------------------
+# Table: authentication
+#------------------------------------------------------------
+
+CREATE TABLE authentication (
+    id_authentication Int AUTO_INCREMENT NOT NULL,
+    id_user Int NOT NULL,
+    login Varchar(100) NOT NULL UNIQUE,
+    hashed_password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_authentication), 
+    FOREIGN KEY (id_user) REFERENCES user(id_user) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: role
@@ -202,7 +210,6 @@ CREATE TABLE reservation(
 	,CONSTRAINT reservation_book0_FK FOREIGN KEY (id_book) REFERENCES book(id_book)
 	,CONSTRAINT reservation_user_AK UNIQUE (id_user)
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: modification

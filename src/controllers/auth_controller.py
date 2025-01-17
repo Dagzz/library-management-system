@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QMessageBox
-from src.services.user_service import UserService
+from src.services.auth_service import AuthService
 
-class LoginController:
+class AuthController:
     def __init__(self, login_view, main_window):
         self.login_view = login_view
         self.main_window = main_window
-        self.user_service = UserService()
+        self.user_service = AuthService()
 
         # Connect the login button
         self.login_view.login_button.clicked.connect(self.handle_login)

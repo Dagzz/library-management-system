@@ -1,4 +1,4 @@
-# ============================================
+# ============================================ 
 # Table: user
 # ============================================
 
@@ -38,6 +38,9 @@ class User(Base):
     loans = relationship("Loan", back_populates="user")
     reservations = relationship("Reservation", back_populates="user")
     modifications = relationship("Modification", back_populates="user")
+    authentication = relationship(
+        "Authentication", back_populates="user", uselist=False
+    )
 
     def __repr__(self):
         return f"<User(id_user={self.id_user}, login='{self.login}')>"

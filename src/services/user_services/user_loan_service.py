@@ -3,7 +3,7 @@ from src.repositories.loan_repository import LoanRepository
 from src.repositories.user_repository import UserRepository
 from src.repositories.book_repository import BookRepository
 
-class LoanService:
+class UserLoanService:
     def __init__(self):
         self.loan_repository = LoanRepository()
         self.user_repository = UserRepository()

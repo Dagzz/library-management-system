@@ -1,0 +1,2 @@
+class AdminBookService :
+    pass

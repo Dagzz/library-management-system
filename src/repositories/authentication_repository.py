@@ -1,0 +1,78 @@
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
+from typing import Optional
+from src.models.authentication import Authentication
+# from werkzeug.security import check_password_hash TODO Implement hashing after
+
+class AuthenticationRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_authentication_by_id(self, id_authentication: int) -> Optional[Authentication]:
+        """
+        Fetch authentication details by ID.
+        
+        :param id_authentication: The ID of the authentication record.
+        :return: The authentication record, or None if not found.
+        """
+        try:
+            return self.session.query(Authentication).filter(Authentication.id_authentication == id_authentication).one()
+        except NoResultFound:
+            return None
+
+    def authenticate_user(self, login: str, password: str) -> Optional[Authentication]:
+        """
+        Authenticate a user by their login and password.
+        
+        :param login: The login credential (e.g., username or email).
+        :param password: The plain text password.
+        :return: The authentication record if credentials are valid, else None.
+        """
+        try:
+            auth = self.session.query(Authentication).filter(Authentication.login == login).one()
+            
+            # Verify password hash c
+            # if check_password_hash(auth.hashed_password, password):
+            #     return auth
+            if (auth.hashed_password == password):
+                return auth
+            else:
+                return None
+        except NoResultFound:
+            return None
+
+    def is_login_available(self, login: str) -> bool:
+        """
+        Check if a login is available.
+        
+        :param login: The login to check.
+        :return: True if the login is available, False otherwise.
+        """
+        auth = self.session.query(Authentication).filter(Authentication.login == login).first()
+        return auth is None
+
+    def register_authentication(self, auth: Authentication) -> Authentication:
+        """
+        Register a new authentication record.
+        
+        :param auth: The authentication object to register (password should already be hashed).
+        :return: The created authentication object.
+        """
+        self.session.add(auth)
+        self.session.commit()
+        return auth
+
+    def change_password(self, id_authentication: int, new_hashed_password: str) -> bool:
+        """
+        Change the password for an authentication record.
+        
+        :param id_authentication: The ID of the authentication record.
+        :param new_hashed_password: The new hashed password.
+        :return: True if the password was successfully changed, False otherwise.
+        """
+        auth = self.session.query(Authentication).filter(Authentication.id_authentication == id_authentication).one_or_none()
+        if auth:
+            auth.hashed_password = new_hashed_password
+            self.session.commit()
+            return True
+        return False

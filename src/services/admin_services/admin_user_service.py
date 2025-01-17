@@ -1,7 +1,7 @@
 from src.repositories.user_repository import UserRepository
 
 
-class UserService:
+class AdminUserService:
     def __init__(self, repository):
         self.user_repository = repository
         # self.loan_repository = LoanRepository()
