@@ -16,7 +16,7 @@ from src.repositories.reservation_repository import ReservationRepository
 from src.repositories.modification_repository import ModificationRepository
 
 # Services
-from src.services.auth_service import AuthService
+from src.services.authentication_service import AuthenticationService
 
 ## User Services
 from src.services.user_services.user_book_service import UserBookService
@@ -69,7 +69,7 @@ class AppContainer:
         self.loan_repo = LoanRepository(get_session)
         
         # Create Services
-        self.auth_service = AuthService(self.book_repo)
+        self.auth_service = AuthenticationService(self.book_repo)
 
         # Create Views
         self.login_view = LoginView()

@@ -1,0 +1,37 @@
+#loginWindow {
+  background-image: url("src/resources/assets/images/auth.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+QLineEdit {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px;
+  font-family: Arial;
+}
+
+QPushButton {
+  background-color: #0b3dbc;
+  color: rgb(255, 255, 255);
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+QPushButton:hover {
+  background-color: #04022a;
+}
+
+QPushButton#cancelButton {
+  background-color: #ffffff;
+  color: #0b3dbc;
+  border: 2px solid #0b3dbc;
+}
+
+QPushButton#cancelButton:hover {
+  background-color: #9fc2c7;
+}

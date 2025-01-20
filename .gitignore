@@ -1,4 +1,5 @@
 src/resources/config/config.ini
+src/resources/assets/images
 src/alembic.ini
 
 # Byte-compiled / optimized / DLL files

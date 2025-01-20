@@ -15,6 +15,7 @@ class User(Base):
     __table_args__ = (
         UniqueConstraint('login', name='user_AK'),
         Index('user_Idx', 'last_name', 'mail'),
+        
     )
 
     id_user = Column(Integer, primary_key=True, autoincrement=True)

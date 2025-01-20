@@ -1,16 +1,18 @@
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 import sys
-
 from src.app_container import AppContainer
+from src.controllers.main_controller import MainController
 
 def main():
     app = QApplication(sys.argv)
 
-    container = AppContainer()
+    app_container = AppContainer()
     
-    container.show_initial_ui()
+    main_controller = MainController(app_container)
     
-    sys.exit(app.exec_())
+    main_controller.start()
+    
+    sys.exit(app.exec()) 
 
 if __name__ == "__main__":
     main()
