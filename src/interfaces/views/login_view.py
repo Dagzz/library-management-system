@@ -25,10 +25,13 @@ Usage:
 - Interacts with the authentication service to validate user credentials.
 """
 
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import Qt 
 import src.core.config.assets_paths as ap
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy
+from PyQt6.QtGui import QIcon
+import src.core.config.assets_paths as ap
+from src.interfaces.views.custom_error import CustomErrorDialog
 
 class LoginView(QDialog):
     def __init__(self):
@@ -52,7 +55,7 @@ class LoginView(QDialog):
         """
         self.setWindowTitle("Warcraft Library")
         self.setFixedSize(500, 400)
-        self.setWindowIcon(QIcon(ap.ICON_PATH))
+        self.setWindowIcon(QIcon(ap.AUTH_ICON))
         self.center_window()
         self.setObjectName("loginWindow")
 
@@ -120,8 +123,13 @@ class LoginView(QDialog):
     
     def show_error_message(self) -> None:
         """
-        Displays a warning message box to inform the user of failed login attempts.
-        
-        - The message box shows a generic "Invalid credentials" message.
+        Displays a custom error message box with a custom icon for failed login attempts.
         """
-        QMessageBox.warning(self, "Login Failed", "Invalid credentials.")
+        error_dialog = CustomErrorDialog(
+            title="Authentication Failed",
+            message="Invalid credentials.\nPlease try again.",
+            icon_path=ap.AUTH_ERROR,
+            dialog_icon_path= ap.AUTH_ERROR_ICON
+        )
+        error_dialog.exec()
+
