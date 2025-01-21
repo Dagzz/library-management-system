@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from src.repositories.loan_repository import LoanRepository
-from src.repositories.user_repository import UserRepository
-from src.repositories.book_repository import BookRepository
+from src.infra.repositories.loan_repository import LoanRepository
+from src.infra.repositories.user_repository import UserRepository
+from src.infra.repositories.book_repository import BookRepository
 
 class UserLoanService:
     def __init__(self):

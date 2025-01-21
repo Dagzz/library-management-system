@@ -1,4 +1,4 @@
-from src.repositories.user_repository import UserRepository
+from src.infra.repositories.user_repository import UserRepository
 
 
 class AdminUserService:

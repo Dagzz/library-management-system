@@ -23,7 +23,7 @@ Usage:
 """
 
 from PyQt6.QtWidgets import QMessageBox
-from src.logic.services.authentication_service import AuthenticationService
+from src.core.config.logging_loader import logger
 
 class AuthController:
     def __init__(self, auth_service, login_view):
@@ -35,7 +35,8 @@ class AuthController:
 
     def handle_login(self):
         login, password = self.login_view.get_credentials()
-
+        
+        # logger.info("Session created successfully.")
         # Call the service to validate credentials
         try:
             auth = self.auth_service.authenticate_user(login, password)

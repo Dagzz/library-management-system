@@ -1,5 +1,5 @@
 #loginWindow {
-  background-image: url("src/resources/assets/images/auth.png");
+  background-image: url("src/static/images/auth.png");
   background-repeat: no-repeat;
   background-position: center;
 }

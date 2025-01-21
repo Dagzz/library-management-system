@@ -26,7 +26,7 @@ def load_config() -> ConfigParser:
     :raises: SystemExit if the configuration file cannot be loaded.
     '''
     
-    logger.info('Loading configuration from config.ini')
+    logger.info('Loading configuration from config.ini.')
     try:
         config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
         config = ConfigParser()
@@ -35,7 +35,7 @@ def load_config() -> ConfigParser:
         if not config.sections():
             raise ValueError(f"Configuration file is empty or improperly formatted: {config_path}")
 
-        logger.info(f'Configuration loaded successfully from {config_path}')
+        logger.info(f'Configuration loaded successfully.')
         return config
 
     except FileNotFoundError:

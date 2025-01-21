@@ -20,15 +20,22 @@ Usage:
 - Instantiated with the AppContainer to centralize and coordinate app functionality.
 - Called by `main.py` to bootstrap and manage the application flow.
 """
-
-from src.core.config.app_container import AppContainer
+import sys
+# from src.core.config.app_container import AppContainer
+from src.core.config.logging_loader import logger
 
 class MainController:
-    def __init__(self, app_container : AppContainer):
+    def __init__(self, app_container):
         self.app_container = app_container
 
     def start(self):
-        auth_controller = self.app_container.auth_controller
+        logger.info("Starting the authentication controller.")
+        try:
+            auth_controller = self.app_container.auth_controller
+        except Exception as e:
+            logger.error(f"Failed to initialize the authentication controller: {e}.")
+            sys.exit(1)
+       
 
     def show_main_window(self):
         main_window = self.app_container.main_window

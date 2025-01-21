@@ -6,21 +6,21 @@ from src.interfaces.controllers.main_controller import MainController
 
 def main():
     
-    logger.info("Starting Library management System.") 
+    logger.info("Starting library management system.") 
     app = QApplication(sys.argv)
     
-    logger.info("Starting Application Container")
+    logger.info("Starting application container.")
     try:
         app_container = AppContainer()    
     except Exception as e:
-        logger.error(f"Failed to initialize application container: {e}")
+        logger.error(f"Failed to initialize application container: {e}.")
         sys.exit(1)
     
-    logger.info("Starting the Main Controller")
+    logger.info("Starting the main controller.")
     try:
         main_controller = MainController(app_container)
     except Exception as e:
-        logger.error(f"Failed to initialize the main controller: {e}")
+        logger.error(f"Failed to initialize the main controller: {e}.")
         sys.exit(1)
     
     main_controller.start()

@@ -1,8 +1,8 @@
 from datetime import datetime
-from src.repositories.reservation_repository import ReservationRepository
-from src.repositories.user_repository import UserRepository
-from src.repositories.book_repository import BookRepository
-from src.repositories.loan_repository import LoanRepository
+from src.infra.repositories.reservation_repository import ReservationRepository
+from src.infra.repositories.user_repository import UserRepository
+from src.infra.repositories.book_repository import BookRepository
+from src.infra.repositories.loan_repository import LoanRepository
 
 class UserReservationService:
     def __init__(self):

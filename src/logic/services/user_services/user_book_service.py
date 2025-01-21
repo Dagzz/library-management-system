@@ -1,4 +1,4 @@
-from src.repositories.book_repository import BookRepository
+from src.infra.repositories.book_repository import BookRepository
 # from repositories.loan_repository import LoanRepository  # if needed
 # from models import Book  # import your SQLAlchemy models if needed
 

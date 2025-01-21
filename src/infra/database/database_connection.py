@@ -2,7 +2,7 @@
 Provides utilities to set up and manage the database connection and sessions.
 
 Purpose:
-- `get_engine`: Creates a SQLAlchemy engine using database configurations from `config.ini`.
+- `get_engine`: Creates a single SQLAlchemy engine using database configurations from `config.ini`.
 - `get_session`: Initializes and returns a new SQLAlchemy session for executing queries and transactions.
 
 Usage:
@@ -13,48 +13,57 @@ Usage:
 """
 from src.core.config.config_loader import load_config
 from sqlalchemy import Engine, create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+from src.core.config.logging_loader import logger
+
+# Initialize the engine once globally
+_engine: Engine = None
+_SessionLocal: sessionmaker = None
 
 def get_engine() -> Engine:
-    '''
-    Create and return a SQLAlchemy engine for database connection.
+    """
+    Return a singleton SQLAlchemy engine for database connection.
 
-    This function reads the configuration from the `config.ini` file 
-    and constructs a connection string to initialize the SQLAlchemy engine.
+    The engine is created once using the configuration from `config.ini` 
+    and reused for subsequent calls.
 
     :return: A SQLAlchemy engine instance for connecting to the database.
-    '''
-    try:
-        config = load_config()
-        
-        host = config['mysql']['host']
-        user = config['mysql']['user']
-        password = config['mysql']['password']
-        database = config['mysql']['database']
-
-        connection_string = f"mysql+mysqlconnector://{user}:{password}@{host}/{database}"
+    """
+    global _engine
+    if _engine is None:
         logger.info("Creating database engine.")
-        
-        return create_engine(connection_string)
-    except Exception as e:
-        logger.error("Failed to create the database engine.", exc_info=True)
-        raise  # Re-raise the exception after logging it.
+        try:
+            config = load_config()
+            host = config['mysql']['host']
+            user = config['mysql']['user']
+            password = config['mysql']['password']
+            database = config['mysql']['database']
 
-def get_session():
-    '''
+            connection_string = f"mysql+mysqlconnector://{user}:{password}@{host}/{database}"
+            _engine = create_engine(connection_string)
+            logger.info("Database engine created successfully.")
+        except Exception as e:
+            logger.error("Failed to create the database engine.", exc_info=True)
+            raise
+    return _engine
+
+def get_session() -> Session:
+    """
     Create and return a new SQLAlchemy session.
 
-    This function initializes a session using the SQLAlchemy engine
-    provided by the `get_engine` function, enabling interaction with
-    the database for executing queries and transactions.
+    This function initializes a session using the globally created 
+    SQLAlchemy engine, enabling interaction with the database for 
+    executing queries and transactions.
 
     :return: A new SQLAlchemy session instance.
-    '''
+    """
+    global _SessionLocal
+    if _SessionLocal is None:
+        _SessionLocal = sessionmaker(bind=get_engine())
+
     try:
-        engine = get_engine()
-        Session = sessionmaker(bind=engine)
-        logger.info("Session created successfully.")
-        return Session()
+        logger.info("Creating a new database session.")
+        return _SessionLocal()
     except Exception as e:
         logger.error("Failed to create a new database session.", exc_info=True)
-        raise  # Re-raise the exception after logging it.
+        raise

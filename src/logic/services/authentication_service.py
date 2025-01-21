@@ -1,6 +1,6 @@
-from src.repositories.authentication_repository import AuthenticationRepository
+from src.infra.repositories.authentication_repository import AuthenticationRepository
+from src.core.models.authentication import Authentication
 # from werkzeug.security import generate_password_hash TODO implement after
-from src.models.authentication import Authentication
 
 class AuthenticationService:
     def __init__(self, repository):
