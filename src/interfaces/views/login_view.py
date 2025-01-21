@@ -25,18 +25,31 @@ Usage:
 - Interacts with the authentication service to validate user credentials.
 """
 
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt 
 import src.core.config.assets_paths as ap
 
 class LoginView(QDialog):
     def __init__(self):
+        """
+        Initializes the LoginView dialog.
+        
+        - Sets up the UI components.
+        - Applies styles using an external stylesheet.
+        """
         super().__init__()
         self.init_ui()
         self.load_styles()
 
     def init_ui(self):
+        """
+        Constructs and arranges the UI elements for the login dialog.
+        
+        - Sets the dialog's title, size, and icon.
+        - Creates input fields for username and password.
+        - Adds a login button and organizes all elements in layouts.
+        """
         self.setWindowTitle("Warcraft Library")
         self.setFixedSize(500, 400)
         self.setWindowIcon(QIcon(ap.ICON_PATH))
@@ -76,15 +89,39 @@ class LoginView(QDialog):
         self.setLayout(main_layout)
 
     def load_styles(self) -> None:
-        # Load the styles from the external stylesheet
+        """
+        Loads and applies styles to the dialog from an external `.qss` stylesheet.
+        
+        - Ensures consistent theming across the application's UI.
+        - Reads the stylesheet file specified in `ap.QSS_FILE`.
+        """
         with open(ap.QSS_FILE, "r") as file:
             self.setStyleSheet(file.read())
 
     def center_window(self) -> None:
+        """
+        Centers the dialog on the user's screen.
+        
+        - Calculates the center of the screen and positions the window accordingly.
+        """
         screen_geometry = self.screen().geometry()
         x = (screen_geometry.width() - self.width()) // 2
         y = (screen_geometry.height() - self.height()) // 2
         self.move(x, y)
 
     def get_credentials(self) -> tuple[str, str]:
+        """
+        Retrieves the username and password entered by the user.
+
+        Returns:
+            tuple[str, str]: A tuple containing the username and password.
+        """
         return self.login_input.text(), self.password_input.text()
+    
+    def show_error_message(self) -> None:
+        """
+        Displays a warning message box to inform the user of failed login attempts.
+        
+        - The message box shows a generic "Invalid credentials" message.
+        """
+        QMessageBox.warning(self, "Login Failed", "Invalid credentials.")

@@ -22,7 +22,6 @@ Usage:
 - Automatically shows the login view on initialization.
 """
 
-from PyQt6.QtWidgets import QMessageBox
 from src.core.config.logging_loader import logger
 
 class AuthController:
@@ -31,17 +30,19 @@ class AuthController:
         self.auth_service = auth_service
         self.login_view.show()
 
+        # Connect Button(s)
         self.login_view.login_button.clicked.connect(self.handle_login)
 
     def handle_login(self):
-        login, password = self.login_view.get_credentials()
         
-        # logger.info("Session created successfully.")
-        # Call the service to validate credentials
+        logger.info("Initiating the user authentication process.")
+        login, password = self.login_view.get_credentials()
+            
         try:
-            auth = self.auth_service.authenticate_user(login, password)
+            self.auth_service.authenticate_user(login, password)
             self.login_view.accept()
-            print("Authentication successful")
+            logger.info("User authentication successful for username: %s.", login)
             # self.main_window.show()
         except ValueError as e:
-            QMessageBox.warning(self.login_view, "Login Failed", "Invalid credentials.")
+            logger.error("Authentication failed for username: %s. Reason: %s", login, str(e))
+            self.login_view.show_error_message()
