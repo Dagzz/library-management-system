@@ -1,10 +1,26 @@
+"""
+AddressRepository
+
+Provides database operations related to the `Address` model.
+
+Responsibilities:
+- Fetching address details by ID or other attributes.
+- Managing the creation, update, and deletion of address records.
+- Specialized queries for address-related operations.
+
+Usage:
+- Initialize with a session factory:
+    repo = AddressRepository(get_session)
+- Use the provided methods to interact with the `Address` model in the database.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Address, City
+from src.core.models import Address, City
 
 class AddressRepository:
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
 
     def get_address_by_id(self, address_id: int) -> Optional[Address]:
         """

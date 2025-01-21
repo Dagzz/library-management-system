@@ -1,6 +1,23 @@
+"""
+CollectionRepository
+
+Handles database operations related to the `Collection` model.
+
+Responsibilities:
+- Managing collection-related data.
+- Fetching collection records by ID or name.
+- Querying collections based on specific criteria.
+- Creating, updating, or deleting collection records.
+
+Usage:
+- Initialize with a session factory:
+    repo = CollectionRepository(get_session)
+- Use the provided methods to interact with the database for collection-related operations.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Collection, Book
+from src.core.models import Collection, Book
 
 class CollectionRepository:
     def __init__(self, session: Session):

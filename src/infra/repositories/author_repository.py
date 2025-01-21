@@ -1,7 +1,25 @@
+"""
+AuthorRepository
+
+Handles database operations related to the `Author` model.
+
+Responsibilities:
+- Managing author-related data.
+- Fetching author records by ID or other attributes.
+- Querying all authors or filtering by specific criteria.
+- Creating, updating, or deleting author records.
+
+Usage:
+- Initialize with a session factory:
+    repo = AuthorRepository(get_session)
+- Use the provided methods to interact with the database for author-related operations.
+"""
+
+
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Author, Book
+from src.core.models import Author, Book
 
 class AuthorRepository:
     def __init__(self, session: Session):

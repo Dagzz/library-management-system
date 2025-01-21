@@ -1,0 +1,2 @@
+class UserMainView:
+    pass

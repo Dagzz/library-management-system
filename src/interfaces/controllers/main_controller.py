@@ -1,4 +1,27 @@
-from src.app_container import AppContainer
+"""
+MainController
+
+This controller serves as the central orchestrator for the application's flow.
+
+Responsibilities:
+- Manages the application's lifecycle, starting from authentication to the main window.
+- Coordinates between different controllers and views initialized in the AppContainer.
+- Provides methods to display the main window after successful authentication.
+
+Key Methods:
+- `__init__`: Initializes the controller with the application's dependency container (`AppContainer`).
+- `start`: Starts the application by activating the authentication controller.
+- `show_main_window`: Displays the main application window.
+
+Dependencies:
+- AppContainer: Provides access to all controllers, views, and services required by the application.
+
+Usage:
+- Instantiated with the AppContainer to centralize and coordinate app functionality.
+- Called by `main.py` to bootstrap and manage the application flow.
+"""
+
+from src.core.config.app_container import AppContainer
 
 class MainController:
     def __init__(self, app_container : AppContainer):

@@ -1,3 +1,21 @@
+"""
+Defines the application container responsible for managing and wiring
+dependencies such as repositories, services, controllers, and views.
+
+Purpose:
+- Centralizes the creation and injection of dependencies.
+- Simplifies dependency management by reducing tight coupling.
+- Serves as the entry point for initializing the application's components.
+
+Structure:
+- INFRA: Handles database session and repositories.
+- LOGIC: Manages business logic through services.
+- INTERFACES: Connects controllers to views for user interaction.
+
+Usage:
+- Initialize the container to create all components:
+    container = AppContainer()
+"""
 # INFRA
 ## Session factory
 from src.infra.database.database_connection import get_session
@@ -71,7 +89,7 @@ class AppContainer:
         # Session-per-transaction model
         # Pass the session factory (get_session) instead of a single session
         # Manage the session lifecycle at the repository level
-        
+
         # Create Repositories
         self.auth_repo = AuthenticationRepository(get_session)
         self.user_repo = UserRepository(get_session)
@@ -87,12 +105,3 @@ class AppContainer:
 
         # Create Controllers
         self.auth_controller = AuthController(self.auth_service, self.login_view)
-        
-        # Possibly pass main_window into some "MainController" if you have one
-
-    def show_initial_ui(self):
-        """
-        Decide which UI to show first (login window, main window, etc.).
-        """
-        self.login_view.show()
-        # Once the user is authenticated, the login_controller might show the main_window, etc.

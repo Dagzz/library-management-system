@@ -1,6 +1,24 @@
+"""
+BookRepository
+
+Handles database operations related to the `Book` model.
+
+Responsibilities:
+- Managing book-related data.
+- Fetching books by ID, title, author, genre, language, or collection.
+- Querying books based on availability, status, or other attributes.
+- Creating, updating, or deleting book records.
+- Fetching reserved or borrowed books.
+
+Usage:
+- Initialize with a session factory:
+    repo = BookRepository(get_session)
+- Use the provided methods to interact with the database for book-related operations.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Book, Author, Genre, Reservation
+from src.core.models import Book, Author, Genre, Reservation
 
 class BookRepository:
     def __init__(self, session: Session):

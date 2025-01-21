@@ -1,6 +1,23 @@
+"""
+LanguageRepository
+
+Handles database operations related to the `Language` model.
+
+Responsibilities:
+- Managing language-related data.
+- Fetching language records by ID or name.
+- Querying languages associated with specific books or other entities.
+- Creating, updating, or deleting language records.
+
+Usage:
+- Initialize with a session factory:
+    repo = LanguageRepository(get_session)
+- Use the provided methods to interact with the database for language-related operations.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Language, Book
+from src.core.models import Language, Book
 
 class LanguageRepository:
     def __init__(self, session: Session):

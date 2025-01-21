@@ -1,7 +1,23 @@
+"""
+UserRepository
+
+Handles database operations related to the `User` model.
+
+Responsibilities:
+- Managing user records, including adding, updating, deleting, and retrieving users.
+- Fetching users by various attributes such as ID, email, or username.
+- Supporting advanced queries for user-related data, such as filtering by status or activity.
+
+Usage:
+- Initialize with a session factory:
+    repo = UserRepository(get_session)
+- Use the provided methods to perform CRUD operations and retrieve user data.
+"""
+
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from typing import Optional, List
-from src.models import User, Role, Address, Reservation
+from src.core.models import User, Role, Address, Reservation
 
 class UserRepository:
     def __init__(self, session: Session):

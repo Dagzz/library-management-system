@@ -1,6 +1,23 @@
+"""
+ReservationRepository
+
+Handles database operations related to the `Reservation` model.
+
+Responsibilities:
+- Managing reservation records, including creating, updating, or deleting reservations.
+- Fetching reservations by ID, user, or book.
+- Checking the reservation status of specific books.
+- Querying confirmed and pending reservations.
+
+Usage:
+- Initialize with a session factory:
+    repo = ReservationRepository(get_session)
+- Use the provided methods to perform CRUD operations and retrieve reservation data.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Reservation 
+from src.core.models import Reservation 
 
 class ReservationRepository:
     def __init__(self, session: Session):

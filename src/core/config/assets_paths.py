@@ -1,14 +1,19 @@
+"""
+Centralizes file paths for static assets (images, stylesheets, fonts).
+This simplifies asset management and avoids hardcoding paths across the project.
+"""
+
 import os
 
-# Base path for assets
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Base path for static assets
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
-# Fonts Path
-# FONT_PATH_1 = os.path.join(BASE_DIR, 'minesweeper', 'src', 'assets', 'fonts', 'Creepster', 'Creepster-Regular.ttf')
+# Fonts Paths
+# FONT_PATH_1 = os.path.join(BASE_DIR, 'static', 'fonts', 'Creepster-Regular.ttf')
 
 # Images paths
-ICON_PATH = os.path.join(BASE_DIR, 'assets', 'images', 'app_icon.png')
-AUTH_BG = os.path.join(BASE_DIR, 'assets', 'images', 'auth.png')
+ICON_PATH = os.path.join(BASE_DIR, 'static', 'images', 'app_icon.png')
+AUTH_BG = os.path.join(BASE_DIR, 'static', 'images', 'auth.png')
 
-#QSS File
-QSS_FILE = os.path.join(BASE_DIR, 'styles', 'styles.qss')
+# QSS File Path
+QSS_FILE = os.path.join(BASE_DIR, 'static', 'styles', 'styles.qss')

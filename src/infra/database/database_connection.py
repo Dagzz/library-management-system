@@ -1,8 +1,21 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from src.resources.config.config_loader import load_config
+"""
+Provides utilities to set up and manage the database connection and sessions.
 
-def get_engine():
+Purpose:
+- `get_engine`: Creates a SQLAlchemy engine using database configurations from `config.ini`.
+- `get_session`: Initializes and returns a new SQLAlchemy session for executing queries and transactions.
+
+Usage:
+- Import the desired function:
+    from src.infra.database.database_connection import get_session
+- Use `get_session` to interact with the database:
+    session = get_session()
+"""
+from src.core.config.config_loader import load_config
+from sqlalchemy import Engine, create_engine
+from sqlalchemy.orm import sessionmaker
+
+def get_engine() -> Engine:
     '''
     Create and return a SQLAlchemy engine for database connection.
 
@@ -11,16 +24,21 @@ def get_engine():
 
     :return: A SQLAlchemy engine instance for connecting to the database.
     '''
-    config = load_config()
-    
-    host = config['mysql']['host']
-    user = config['mysql']['user']
-    password = config['mysql']['password']
-    database = config['mysql']['database']
+    try:
+        config = load_config()
+        
+        host = config['mysql']['host']
+        user = config['mysql']['user']
+        password = config['mysql']['password']
+        database = config['mysql']['database']
 
-    connection_string = f"mysql+mysqlconnector://{user}:{password}@{host}/{database}"
-
-    return create_engine(connection_string)
+        connection_string = f"mysql+mysqlconnector://{user}:{password}@{host}/{database}"
+        logger.info("Creating database engine.")
+        
+        return create_engine(connection_string)
+    except Exception as e:
+        logger.error("Failed to create the database engine.", exc_info=True)
+        raise  # Re-raise the exception after logging it.
 
 def get_session():
     '''
@@ -32,6 +50,11 @@ def get_session():
 
     :return: A new SQLAlchemy session instance.
     '''
-    engine = get_engine()
-    Session = sessionmaker(bind=engine)
-    return Session()
+    try:
+        engine = get_engine()
+        Session = sessionmaker(bind=engine)
+        logger.info("Session created successfully.")
+        return Session()
+    except Exception as e:
+        logger.error("Failed to create a new database session.", exc_info=True)
+        raise  # Re-raise the exception after logging it.

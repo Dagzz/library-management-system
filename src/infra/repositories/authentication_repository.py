@@ -1,7 +1,25 @@
+"""
+AuthenticationRepository
+
+Handles database operations related to the `Authentication` model.
+
+Responsibilities:
+- Managing user authentication data (e.g., login, hashed passwords).
+- Fetching authentication details by ID or login.
+- Verifying login availability.
+- Registering new authentication records.
+- Updating hashed passwords.
+
+Usage:
+- Initialize with a session factory:
+    repo = AuthenticationRepository(get_session)
+- Use the provided methods for CRUD and authentication-related queries.
+"""
+
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from typing import Optional
-from src.models.authentication import Authentication
+from src.core.models.authentication import Authentication
 # from werkzeug.security import check_password_hash  # TODO: Implement hashing after
 
 class AuthenticationRepository:

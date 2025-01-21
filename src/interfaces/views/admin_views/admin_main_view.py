@@ -1,0 +1,2 @@
+class AdminMainView:
+    pass

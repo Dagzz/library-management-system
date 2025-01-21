@@ -1,6 +1,23 @@
+"""
+CityRepository
+
+Handles database operations related to the `City` model.
+
+Responsibilities:
+- Managing city-related data.
+- Fetching city records by ID or name.
+- Querying cities based on specific criteria.
+- Creating, updating, or deleting city records.
+
+Usage:
+- Initialize with a session factory:
+    repo = CityRepository(get_session)
+- Use the provided methods to interact with the database for city-related operations.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import City, Address
+from src.core.models import City, Address
 
 class CityRepository:
     def __init__(self, session: Session):

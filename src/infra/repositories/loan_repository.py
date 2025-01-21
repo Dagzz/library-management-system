@@ -1,7 +1,23 @@
+"""
+LoanRepository
+
+Handles database operations related to the `Loan` model.
+
+Responsibilities:
+- Managing loan-related data, including adding, updating, or deleting loan records.
+- Fetching loan records by ID, user, or book.
+- Querying active loans, overdue loans, or loan history for specific users or books.
+
+Usage:
+- Initialize with a session factory:
+    repo = LoanRepository(get_session)
+- Use the provided methods to perform CRUD operations and queries on the `Loan` table.
+"""
+
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from typing import List, Optional
-from src.models import Loan, Reservation
+from src.core.models import Loan, Reservation
 
 class LoanRepository:
     def __init__(self, session: Session):

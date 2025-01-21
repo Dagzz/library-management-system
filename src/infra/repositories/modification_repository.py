@@ -1,6 +1,22 @@
+"""
+ModificationRepository
+
+Handles database operations related to the `Modification` model.
+
+Responsibilities:
+- Managing modification records, including adding, updating, or deleting records.
+- Fetching modification records by ID or associated user.
+- Querying the history of changes made by users or to specific entities.
+
+Usage:
+- Initialize with a session factory:
+    repo = ModificationRepository(get_session)
+- Use the provided methods to perform CRUD operations and retrieve modification history.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Modification
+from src.core.models import Modification
 
 class ModificationRepository:
     def __init__(self, session: Session):

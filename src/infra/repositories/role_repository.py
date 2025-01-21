@@ -1,6 +1,22 @@
+"""
+RoleRepository
+
+Handles database operations related to the `Role` model.
+
+Responsibilities:
+- Managing roles in the database, including adding, updating, or deleting roles.
+- Fetching roles by ID or name.
+- Associating roles with users.
+
+Usage:
+- Initialize with a session factory:
+    repo = RoleRepository(get_session)
+- Use the provided methods to perform CRUD operations and retrieve role data.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Role, User
+from src.core.models import Role, User
 
 class RoleRepository:
     def __init__(self, session: Session):

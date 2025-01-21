@@ -1,6 +1,23 @@
+"""
+GenreRepository
+
+Handles database operations related to the `Genre` model.
+
+Responsibilities:
+- Managing genre-related data.
+- Fetching genre records by ID or name.
+- Querying genres associated with specific books or criteria.
+- Creating, updating, or deleting genre records.
+
+Usage:
+- Initialize with a session factory:
+    repo = GenreRepository(get_session)
+- Use the provided methods to interact with the database for genre-related operations.
+"""
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from src.models import Genre, Book
+from src.core.models import Genre, Book
 
 class GenreRepository:
     def __init__(self, session: Session):
