@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox
 from src.services.authentication_service import AuthenticationService
 
 class AuthController:
@@ -6,16 +6,17 @@ class AuthController:
         self.login_view = login_view
         self.auth_service = auth_service
         self.login_view.show()
-        # Connect the login button
+
         self.login_view.login_button.clicked.connect(self.handle_login)
 
     def handle_login(self):
         login, password = self.login_view.get_credentials()
 
         # Call the service to validate credentials
-        user = self.auth_service.validate_credentials(login, password)
-        if user:
-            self.login_view.accept()  # Close the dialog
-            # self.main_window.show()   # Show the main app
-        else:
+        try:
+            auth = self.auth_service.authenticate_user(login, password)
+            self.login_view.accept()
+            print("Authentication successful")
+            # self.main_window.show()
+        except ValueError as e:
             QMessageBox.warning(self.login_view, "Login Failed", "Invalid credentials.")

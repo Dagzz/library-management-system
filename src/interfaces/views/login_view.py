@@ -33,22 +33,18 @@ class LoginView(QDialog):
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.password_input.setPlaceholderText("Enter your password")
 
-        # Buttons
+        # Button
         button_layout = QHBoxLayout()
         button_layout.setSpacing(10)
 
         self.login_button = QPushButton("Login")
-        self.cancel_button = QPushButton("Cancel")
-        self.cancel_button.setObjectName("cancelButton")
 
         button_layout.addWidget(self.login_button)
-        button_layout.addWidget(self.cancel_button)
 
         main_layout.addItem(top_spacer)  
         main_layout.addWidget(self.login_input)
         main_layout.addWidget(self.password_input)
         main_layout.addLayout(button_layout)
-
 
         self.setLayout(main_layout)
 

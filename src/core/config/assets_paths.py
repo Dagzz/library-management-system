@@ -1,7 +1,7 @@
 import os
 
 # Base path for assets
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '...'))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Fonts Path
 # FONT_PATH_1 = os.path.join(BASE_DIR, 'minesweeper', 'src', 'assets', 'fonts', 'Creepster', 'Creepster-Regular.ttf')
