@@ -13,7 +13,6 @@ from .associations import user_role_table
 class User(Base):
     __tablename__ = 'user'
     __table_args__ = (
-        UniqueConstraint('login', name='user_AK'),
         Index('user_Idx', 'last_name', 'mail'),
         
     )
@@ -22,10 +21,8 @@ class User(Base):
     first_name = Column(String(100), nullable=False)
     date_of_birth = Column(DateTime, nullable=False)
     phone = Column(String(15), nullable=False)
-    hashed_password = Column(String(255), nullable=False)
     last_connection_date = Column(DateTime, nullable=False)
     is_active = Column(Boolean, nullable=False)
-    login = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     mail = Column(String(254), nullable=False)
     id_address = Column(Integer, ForeignKey('address.id_address'))

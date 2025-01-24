@@ -92,12 +92,13 @@ class AppContainer:
 
         # Create Repositories
         self.auth_repo = AuthenticationRepository(get_session)
+        self.role_repo = RoleRepository(get_session)
         self.user_repo = UserRepository(get_session)
         self.book_repo = BookRepository(get_session)
         self.loan_repo = LoanRepository(get_session)
         
         # Create Services
-        self.auth_service = AuthenticationService(self.auth_repo)
+        self.auth_service = AuthenticationService(self.auth_repo, self.user_repo, self.role_repo)
 
         # Create Views
         self.login_view = LoginView()

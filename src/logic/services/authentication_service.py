@@ -1,11 +1,13 @@
-from src.infra.repositories.authentication_repository import AuthenticationRepository
 from src.core.models.authentication import Authentication
 # from werkzeug.security import generate_password_hash TODO implement after
+from src.core.session_manager import AppSession
 
 class AuthenticationService:
-    def __init__(self, repository):
-        self.authentication_repository = repository
-
+    def __init__(self, auth_repository, user_repository, role_repository):
+        self.authentication_repository = auth_repository
+        self.user_repository = user_repository
+        self.role_repository = role_repository
+        
     def register_user(self, id_user, login, password):
         """
         Registers a new user for authentication.
@@ -33,6 +35,46 @@ class AuthenticationService:
             raise ValueError("Invalid login or password.")
         return auth
 
+    def set_user_session(self, id_user: int) -> None:
+        """
+        Put the user's data in the session.
+        Retrieves ID, First name, Last name, and Roles.
+
+        Args:
+            id_user (int): The ID of the user.
+        Raises:
+            ValueError: If the user or roles cannot be retrieved.
+        """
+        try:
+            user = self.user_repository.get_user_by_id(id_user)
+            if not user:
+                raise ValueError(f"User with ID {id_user} not found.")
+            
+            roles = self.role_repository.get_user_roles(id_user)
+            if not roles:
+                raise ValueError(f"No roles found for user with ID {id_user}.")
+            
+            session = AppSession()
+            session.set_user(
+                user_id=id_user,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                roles=roles
+            )
+        except Exception as e:
+            raise ValueError(f"Failed to set user session for user ID {id_user}.") from e
+
+       
+    def update_user_last_connection_date(self, id_user):
+        """
+        Updates the last_connection_date for a user.
+        """
+        try:
+            self.user_repository.update_last_connection_date(id_user)
+        except Exception as e:
+            # raise ValueError(f"Failed to update last connection date for user ID {id_user}.") from e
+            raise e
+        
     def change_user_password(self, id_authentication, new_password):
         """
         Changes the password for a user.

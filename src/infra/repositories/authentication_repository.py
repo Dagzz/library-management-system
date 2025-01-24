@@ -15,8 +15,6 @@ Usage:
     repo = AuthenticationRepository(get_session)
 - Use the provided methods for CRUD and authentication-related queries.
 """
-
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from typing import Optional
 from src.core.models.authentication import Authentication
@@ -114,3 +112,4 @@ class AuthenticationRepository:
             raise
         finally:
             session.close()
+    

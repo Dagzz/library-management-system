@@ -16,6 +16,7 @@ Modules:
 from .config.config_loader import load_config
 from .config.logging_loader import logger
 from .models.base import Base
+from .session_manager import AppSession
 
 # Expose app_container for centralized dependency injection if needed
 from .config.app_container import AppContainer
@@ -25,4 +26,5 @@ __all__ = [
     "logger",
     "Base",
     "AppContainer",
+    "AppSession"
 ]

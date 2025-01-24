@@ -1,24 +1,19 @@
-"""
-Provides utilities to set up and manage the database connection and sessions.
-
-Purpose:
-- `get_engine`: Creates a single SQLAlchemy engine using database configurations from `config.ini`.
-- `get_session`: Initializes and returns a new SQLAlchemy session for executing queries and transactions.
-
-Usage:
-- Import the desired function:
-    from src.infra.database.database_connection import get_session
-- Use `get_session` to interact with the database:
-    session = get_session()
-"""
-from src.core.config.config_loader import load_config
-from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import Engine, create_engine
+from src.core.config.config_loader import load_config
 from src.core.config.logging_loader import logger
 
-# Initialize the engine once globally
+# Initialize the engine and session maker globally
 _engine: Engine = None
 _SessionLocal: sessionmaker = None
+
+class CustomSession(Session):
+    """
+    A custom SQLAlchemy Session that logs when the session is closed.
+    """
+    def close(self):
+        logger.info("Closing the database session.")
+        super().close()
 
 def get_engine() -> Engine:
     """
@@ -47,19 +42,19 @@ def get_engine() -> Engine:
             raise
     return _engine
 
-def get_session() -> Session:
+def get_session() -> CustomSession:
     """
-    Create and return a new SQLAlchemy session.
+    Create and return a new SQLAlchemy session using the custom session class.
 
     This function initializes a session using the globally created 
     SQLAlchemy engine, enabling interaction with the database for 
     executing queries and transactions.
 
-    :return: A new SQLAlchemy session instance.
+    :return: A new CustomSession instance.
     """
     global _SessionLocal
     if _SessionLocal is None:
-        _SessionLocal = sessionmaker(bind=get_engine())
+        _SessionLocal = sessionmaker(bind=get_engine(), class_=CustomSession)
 
     try:
         logger.info("Creating a new database session.")
