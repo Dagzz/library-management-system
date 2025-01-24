@@ -121,7 +121,7 @@ class LoginView(QDialog):
         """
         return self.login_input.text(), self.password_input.text()
     
-    def show_error_message(self) -> None:
+    def show_credentials_error_message(self) -> None:
         """
         Displays a custom error message box with a custom icon for failed login attempts.
         """
@@ -132,4 +132,19 @@ class LoginView(QDialog):
             dialog_icon_path= ap.AUTH_ERROR_ICON
         )
         error_dialog.exec()
+        
+    def show_connection_error_message(self) -> None:
+        """
+        Displays a custom error message box with a custom icon for failed login attempts.
+        """
+        error_dialog = CustomErrorDialog(
+            title="Authentication Failed",
+            message="Oops! There seems to be an issue on our end. Please wait a moment or contact support.",
+            icon_path=ap.AUTH_ERROR,
+            dialog_icon_path= ap.AUTH_ERROR_ICON
+        )
+        error_dialog.exec()
+        
+            
+        
 

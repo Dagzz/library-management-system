@@ -1,6 +1,7 @@
 from src.core.models.authentication import Authentication
 # from werkzeug.security import generate_password_hash TODO implement after
 from src.core.session_manager import AppSession
+from src.core.custom_exceptions import DatabaseUpdateError
 
 class AuthenticationService:
     def __init__(self, auth_repository, user_repository, role_repository):
@@ -33,7 +34,7 @@ class AuthenticationService:
         auth = self.authentication_repository.authenticate_user(login, password)
         if not auth:
             raise ValueError("Invalid login or password.")
-        return auth
+        return auth.id_user
 
     def set_user_session(self, id_user: int) -> None:
         """
@@ -62,7 +63,7 @@ class AuthenticationService:
                 roles=roles
             )
         except Exception as e:
-            raise ValueError(f"Failed to set user session for user ID {id_user}.") from e
+            raise ConnectionError(f"Failed to set user session for user ID {id_user}.") from e
 
        
     def update_user_last_connection_date(self, id_user):
@@ -72,8 +73,8 @@ class AuthenticationService:
         try:
             self.user_repository.update_last_connection_date(id_user)
         except Exception as e:
-            # raise ValueError(f"Failed to update last connection date for user ID {id_user}.") from e
-            raise e
+            # Minor error so we handle it here
+            raise DatabaseUpdateError(f"Failed to update last connection date for user ID {id_user}.") from e
         
     def change_user_password(self, id_authentication, new_password):
         """
@@ -82,7 +83,7 @@ class AuthenticationService:
         # hashed_password = generate_password_hash(new_password)
         hashed_password = new_password
         if not self.authentication_repository.change_password(id_authentication, hashed_password):
-            raise ValueError("Failed to change password: authentication record not found.")
+            raise DatabaseUpdateError("Failed to change password: authentication record not found.")
         return True
 
     def is_login_available(self, login):

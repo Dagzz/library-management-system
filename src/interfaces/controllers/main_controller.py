@@ -1,5 +1,6 @@
 import sys
 from src.core.config.logging_loader import logger
+from src.core.session_manager import AppSession
 
 class MainController:
     """
@@ -35,14 +36,14 @@ class MainController:
         Starts the application workflow by initiating the authentication flow.
         """
         logger.info("Starting the application workflow.")
-        # Retrieve the AuthController from the container
         self.auth_controller = self.app_container.auth_controller
         # Set up callback for success
         self.auth_controller.on_login_success = self.on_auth_success
         self.auth_controller.start_auth_flow()
 
-    def on_auth_success(self, auth):
-        pass
+    def on_auth_success(self):
+        session = AppSession()
+        print(session)
 
     def show_role_choice_view(self, user):
         """

@@ -1,4 +1,5 @@
 from src.core.config.logging_loader import logger
+from src.core.custom_exceptions import DatabaseUpdateError
 
 class AuthController:
     """
@@ -34,7 +35,7 @@ class AuthController:
         self.login_view = login_view
 
         # Callbacks (set by MainController)
-        self.on_login_success = None  # Expected signature: on_login_success(authentication)
+        self.on_login_success = None  # Expected signature: on_login_success()
 
     def start_auth_flow(self):
         """
@@ -52,17 +53,26 @@ class AuthController:
         login, password = self.login_view.get_credentials()
 
         try:
-            # The authenticate_user method should return an authentication object 
-            auth = self.auth_service.authenticate_user(login, password)
+            # The authenticate_user method should return a user id
+            id_user = self.auth_service.authenticate_user(login, password)
             logger.info("Updating the last connection date.")
-            self.auth_service.update_user_last_connection_date(auth.id_user)
+            
+            try:
+                self.auth_service.update_user_last_connection_date(id_user)
+            except DatabaseUpdateError as e:
+                # Minor error, we handle it here
+                logger.warning(
+                    "Failed to update last connection date for user '%s'. Proceeding with login. Reason: %s",
+                    login,
+                    str(e)
+                )
             logger.info("Setting user session.")
-            self.auth_service.set_user_session(auth.id_user)
+            self.auth_service.set_user_session(id_user)
 
             logger.info("User authentication successful for username: %s.", login)
             # Notify MainController of success
             if self.on_login_success:
-                self.on_login_success(auth)
+                self.on_login_success()
 
             # Close the login view
             self.login_view.accept()
@@ -70,7 +80,10 @@ class AuthController:
         except ValueError as e:
             logger.error("Authentication failed for username '%s'. Reason: %s", login, str(e))
             # Show error message to the user
-            self.login_view.show_error_message()
+            self.login_view.show_credentials_error_message()
+        except ConnectionError as e:
+            logger.error("Connection issue while authenticating username '%s'. Reason: %s", login, str(e))
+            self.login_view.show_connection_error_message()
             
     def update_user_last_connection(self, id_user: int) -> None:
         """

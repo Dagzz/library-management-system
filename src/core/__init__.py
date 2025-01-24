@@ -20,11 +20,13 @@ from .session_manager import AppSession
 
 # Expose app_container for centralized dependency injection if needed
 from .config.app_container import AppContainer
+from .custom_exceptions import DatabaseUpdateError
 
 __all__ = [
     "load_config",
     "logger",
     "Base",
     "AppContainer",
-    "AppSession"
+    "AppSession",
+    "DatabaseUpdateError",
 ]
